@@ -1,44 +1,55 @@
-# Basic Python Plugin Example
+# Python Plugin for Xiaomi Philips LED Bulb
 #
-# Author: GizMoCuz
+# Author: Shainny 
 #
 """
-<plugin key="BasePlug" name="Basic Python Plugin Example" author="gizmocuz" version="1.0.0" wikilink="http://www.domoticz.com/wiki/plugins/plugin.html" externallink="https://www.google.com/">
+<plugin key="PhilipsBulb" name="Xiaomi Philips LED Bulb" author="Shainny" version="0.0.1">
     <params>
+        <param field="Adress" label="IP Adress" width="200px" requiered="true" default="192.168.0.0"/>
+        <param field="Token" label="Xiaomi Token" width="500px" requiered="true" default="ffffffffffffffffffffffffffffffff"/>
+        <param field="Mode6" label="Debug" width="75px">
+            <options>
+                <option label="True" value="Debug"/>
+                <option label="False" value="Normal" default="true"/>
+            </options>
+        </param>
     </params>
 </plugin>
 """
 import Domoticz
+import miio
 
 class BasePlugin:
-    enabled = False
+    bulb = None
+
     def __init__(self):
-        #self.var = 123
         return
 
     def onStart(self):
-        Domoticz.Log("onStart called")
+        if Parameters["Mode6"] == "Debug":
+            Domoticz.Debugging(1)
+        Domoticz.Debug("onStart called")
 
     def onStop(self):
-        Domoticz.Log("onStop called")
+        Domoticz.Debug("onStop called")
 
     def onConnect(self, Connection, Status, Description):
-        Domoticz.Log("onConnect called")
+        Domoticz.Debug("onConnect called: Connection=" + str(Connection) + ", Status=" + str(Status) + ", Description=" + str(Description))
 
     def onMessage(self, Connection, Data):
-        Domoticz.Log("onMessage called")
+        Domoticz.Debug("onMessage called: Connection=" + str(Connection) + ", Data=" + str(Data))
 
     def onCommand(self, Unit, Command, Level, Hue):
-        Domoticz.Log("onCommand called for Unit " + str(Unit) + ": Parameter '" + str(Command) + "', Level: " + str(Level))
+        Domoticz.Debug("onCommand called: Unit=" + str(Unit) + ", Parameter=" + str(Command) + ", Level=" + str(Level))
 
     def onNotification(self, Name, Subject, Text, Status, Priority, Sound, ImageFile):
-        Domoticz.Log("Notification: " + Name + "," + Subject + "," + Text + "," + Status + "," + str(Priority) + "," + Sound + "," + ImageFile)
+        Domoticz.Debug("Notification: " + Name + "," + Subject + "," + Text + "," + Status + "," + str(Priority) + "," + Sound + "," + ImageFile)
 
     def onDisconnect(self, Connection):
-        Domoticz.Log("onDisconnect called")
+        Domoticz.Debug("onDisconnect called")
 
     def onHeartbeat(self):
-        Domoticz.Log("onHeartbeat called")
+        Domoticz.Debug("onHeartbeat called")
 
 global _plugin
 _plugin = BasePlugin()
