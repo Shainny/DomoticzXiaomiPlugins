@@ -5,8 +5,8 @@
 """
 <plugin key="PhilipsBulb" name="Xiaomi Philips LED Bulb" author="Shainny" version="0.0.1">
     <params>
-        <param field="Adress" label="IP Adress" width="200px" requiered="true" default="192.168.0.0"/>
-        <param field="Token" label="Xiaomi Token" width="500px" requiered="true" default="ffffffffffffffffffffffffffffffff"/>
+        <param field="Address" label="IP Adress" width="200px" requiered="true" default="192.168.0.0"/>
+        <param field="Password" label="Token" width="400px" requiered="true" default="ffffffffffffffffffffffffffffffff"/>
         <param field="Mode6" label="Debug" width="75px">
             <options>
                 <option label="True" value="Debug"/>
@@ -17,6 +17,9 @@
 </plugin>
 """
 import Domoticz
+# Fix import of libs installed with pip as PluginSystem has a wierd pythonpath...
+import sys
+sys.path.append("/usr/local/lib/python%s.%s/dist-packages" % (sys.version_info.micro, sys.version_info.minor))
 import miio
 
 class BasePlugin:
@@ -26,9 +29,14 @@ class BasePlugin:
         return
 
     def onStart(self):
+        debug = 0
         if Parameters["Mode6"] == "Debug":
             Domoticz.Debugging(1)
-        Domoticz.Debug("onStart called")
+            debug = 1
+        ip = Parameters["Address"]
+        token = Parameters["Password"]
+        self.bulb = PhilipsBulb(ip, token, 0, debug)
+        Domoticz.Debug("Xiaomi Philips LED Bulb created with address '" + Parameters["Address"] + "' and token '" + token + "'")
 
     def onStop(self):
         Domoticz.Debug("onStop called")
