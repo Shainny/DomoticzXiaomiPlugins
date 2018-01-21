@@ -30,34 +30,50 @@ class BasePlugin:
 
     def onStart(self):
         debug = 0
-        if Parameters["Mode6"] == "Debug":
+        if Parameters["Mode6"] == "Debug" :
             Domoticz.Debugging(1)
             debug = 1
+
         ip = Parameters["Address"]
         token = Parameters["Password"]
         self.bulb = PhilipsBulb(ip, token, 0, debug)
         Domoticz.Debug("Xiaomi Philips LED Bulb created with address '" + Parameters["Address"] + "' and token '" + token + "'")
 
+        if (len(Devices) == 0) :
+            # LimitlessLights / White
+            # See https://github.com/domoticz/domoticz/blob/development/hardware/hardwaretypes.h for device types
+            Domoticz.Device(Name="LED Bulb", Unit=1, Type=241, Subtype=3).Create()
+
+        DumpConfigToLog()
+        return
+
     def onStop(self):
         Domoticz.Debug("onStop called")
+        return
 
     def onConnect(self, Connection, Status, Description):
         Domoticz.Debug("onConnect called: Connection=" + str(Connection) + ", Status=" + str(Status) + ", Description=" + str(Description))
+        return
 
     def onMessage(self, Connection, Data):
         Domoticz.Debug("onMessage called: Connection=" + str(Connection) + ", Data=" + str(Data))
+        return
 
     def onCommand(self, Unit, Command, Level, Hue):
         Domoticz.Debug("onCommand called: Unit=" + str(Unit) + ", Parameter=" + str(Command) + ", Level=" + str(Level))
+        return
 
     def onNotification(self, Name, Subject, Text, Status, Priority, Sound, ImageFile):
         Domoticz.Debug("Notification: " + Name + "," + Subject + "," + Text + "," + Status + "," + str(Priority) + "," + Sound + "," + ImageFile)
+        return
 
     def onDisconnect(self, Connection):
         Domoticz.Debug("onDisconnect called")
+        return
 
     def onHeartbeat(self):
-        Domoticz.Debug("onHeartbeat called")
+        #Domoticz.Debug("onHeartbeat called")
+        return
 
 global _plugin
 _plugin = BasePlugin()
@@ -94,7 +110,7 @@ def onHeartbeat():
     global _plugin
     _plugin.onHeartbeat()
 
-    # Generic helper functions
+# Generic helper functions
 def DumpConfigToLog():
     for x in Parameters:
         if Parameters[x] != "":
