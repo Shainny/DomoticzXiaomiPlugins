@@ -80,12 +80,16 @@ class BasePlugin:
                 self.TurnOff()
             elif ("Bright Up" == Command):
                 # TODO
+                pass
             elif ("Bright Down" == Command):
                 # TODO
+                pass
             elif ("Warmer" == Command):
                 # TODO
+                pass
             elif ("Cooler" == Command):
                 # TODO
+                pass
         else:
             Domoticz.Error("Unknown Unit number : " + str(Unit))
 
