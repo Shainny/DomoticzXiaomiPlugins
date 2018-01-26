@@ -104,7 +104,7 @@ class BasePlugin:
         return
 
     def onHeartbeat(self):
-        self.heartbeatCount++
+        self.heartbeatCount += 1
         if (self.heartbeatCount == 10): # Each minute
             self.UpdateStatus()
             self.heartbeatCount = 0
