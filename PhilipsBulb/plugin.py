@@ -24,6 +24,7 @@ import miio
 
 class BasePlugin:
     bulb = None
+    status = None
 
     def __init__(self):
         return
@@ -44,7 +45,11 @@ class BasePlugin:
             # See https://github.com/domoticz/domoticz/blob/development/hardware/hardwaretypes.h for device types
             Domoticz.Device(Name="LED Bulb", Unit=1, Type=241, Subtype=3).Create()
 
+        # Read initial state
+        self.UpdateStatus()
+
         DumpConfigToLog()
+
         return
 
     def onStop(self):
@@ -61,6 +66,18 @@ class BasePlugin:
 
     def onCommand(self, Unit, Command, Level, Hue):
         Domoticz.Debug("onCommand called: Unit=" + str(Unit) + ", Parameter=" + str(Command) + ", Level=" + str(Level))
+
+        Command = Command.strip()
+
+        if (Unit == 1):
+            if (Command == "On"):
+                self.TurnOn()
+            elif (Command == "Off"):
+                self.TurnOff()
+
+        else:
+            Domoticz.Error("Unknown Unit number : " + str(Unit))
+
         return
 
     def onNotification(self, Name, Subject, Text, Status, Priority, Sound, ImageFile):
@@ -73,6 +90,32 @@ class BasePlugin:
 
     def onHeartbeat(self):
         #Domoticz.Debug("onHeartbeat called")
+        return
+
+    def TurnOn(self):
+        if (self.status.is_on == False):
+            self.bulb.on()
+            UpdateDevice(1, 0, "On")
+        return
+
+    def TurnOff(self):
+        if (self.status.is_on == True):
+            self.bulb.off()
+            UpdateDevice(1, 0, "Off")
+        return
+
+    def UpdateStatus(self):
+        self.status = self.bulb.status()
+        Domoticz.Debug("Status : On = " + str(self.status.is_on) \
+                            + ", Brightness = " + str(self.status.brightness) \
+                            + ", ColorTemp = " + str(self.status.color_temperature) \
+                            + ", DelayOff = " + str(self.status.delay_off_countdown) \
+                            + ", Power = " + str(self.status.power))
+        
+        if (self.status.is_on == True):
+            UpdateDevice(1, 0, "On")
+        else:
+            UpdateDevice(1, 0, "Off")
         return
 
 global _plugin
@@ -111,6 +154,13 @@ def onHeartbeat():
     _plugin.onHeartbeat()
 
 # Generic helper functions
+def UpdateDevice(Unit, nValue, sValue):
+    if (Unit in Devices):
+        if (Devices[Unit].nValue != nValue) or (Devices[Unit].sValue != sValue):
+            Devices[Unit].Update(nValue, str(sValue))
+            Devices.Debug("Update '" + Devices[Unit].Name + "' : " + str(nValue) + " - " + str(sValue))
+    return
+
 def DumpConfigToLog():
     for x in Parameters:
         if Parameters[x] != "":
