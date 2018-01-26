@@ -124,7 +124,7 @@ class BasePlugin:
 
     def UpdateStatus(self):
         self.status = self.bulb.status()
-        Domoticz.Debug(str(status))
+        Domoticz.Debug(str(self.status))
 
         if (self.status.is_on == True):
             UpdateDevice(self.lightUnit, 1, "On")
