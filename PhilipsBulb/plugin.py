@@ -36,7 +36,7 @@ class BasePlugin:
 
         ip = Parameters["Address"]
         token = Parameters["Password"]
-        self.bulb = PhilipsBulb(ip, token, 0, debug)
+        self.bulb = miio.PhilipsBulb(ip, token, 0, debug)
         Domoticz.Debug("Xiaomi Philips LED Bulb created with address '" + Parameters["Address"] + "' and token '" + token + "'")
 
         if (len(Devices) == 0) :
