@@ -124,7 +124,11 @@ class BasePlugin:
 
     def UpdateStatus(self):
         self.status = self.bulb.status()
-        Domoticz.Debug(str(self.status))
+        Domoticz.Debug("Status : On = " + str(self.status.is_on) + \
+                              ", Brightness = " + str(self.status.brightness) + \
+                              ", ColorTemp = " + str(self.status.color_temperature) + \
+                              ", DelayOff = " + str(self.status.delay_off_countdown) + \
+                              ", Power = " + str(self.status.power))
 
         if (self.status.is_on == True):
             UpdateDevice(self.lightUnit, 1, "On")
