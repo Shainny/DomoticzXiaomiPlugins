@@ -112,14 +112,14 @@ class BasePlugin:
 
     def TurnOn(self):
         if (self.status.is_on == False):
-            if (self.bulb.on() == "ok"):
+            if (self.bulb.on() == ["ok"]):
                 self.status.is_on = True
                 UpdateDevice(self.lightUnit, 1, "On")
         return
 
     def TurnOff(self):
         if (self.status.is_on == True):
-            if (self.bulb.off() == "ok"):
+            if (self.bulb.off() == ["ok"]):
                 self.status.is_on = False
                 UpdateDevice(self.lightUnit, 0, "Off")
         return
