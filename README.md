@@ -9,11 +9,8 @@ This project is an attempt to make Python plugins for Xiaomi devices in Domoticz
 
 # Troubleshooting
 
-Actual Python PluginSystem crash or deadlock with python 3.5 (default Debian Stretch version).
-Should work with 3.4.
-See issues :
-- https://github.com/domoticz/domoticz/issues/2092
-- https://github.com/domoticz/domoticz/issues/2073
+- Device[X].Update() crash domoticz if called whith implicit parameters. See https://github.com/domoticz/domoticz/issues/2092
+- Calling python-miio seems to freeze domoticz's plugin system. Don't know why but similar project faced the same issue. See https://github.com/mrin/domoticz-mirobot-plugin
 
 # Help
 
