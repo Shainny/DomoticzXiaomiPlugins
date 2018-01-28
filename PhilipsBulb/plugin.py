@@ -21,7 +21,7 @@
 import Domoticz
 # Fix import of libs installed with pip as PluginSystem has a wierd pythonpath...
 import sys
-sys.path.append("/usr/local/lib/python%s.%s/dist-packages" % (sys.version_info.micro, sys.version_info.minor))
+sys.path.append("/usr/local/lib/python%s.%s/dist-packages" % (sys.version_info.major, sys.version_info.minor))
 import miio
 
 
